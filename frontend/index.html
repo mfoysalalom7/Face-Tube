@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>FaceTube — Connect. Create. Share.</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FF1E44">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dark-mode.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation Bar -->
+    <header class="top-navbar">
+      <div class="brand-section" onclick="FaceTubeApp.navigateTo('feed')">
+        <div class="brand-logo-icon">F</div>
+        <div>
+          <div class="brand-title">FaceTube</div>
+          <div class="brand-tagline">Connect. Create. Share.</div>
+        </div>
+      </div>
+
+      <div class="nav-search-bar" id="nav-search-bar">
+        <span class="nav-search-icon">🔍</span>
+        <input type="text" id="global-search-input" class="nav-search-input" placeholder="Search people, #tags, videos, posts...">
+      </div>
+
+      <div class="nav-actions">
+        <!-- Theme Toggle -->
+        <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme" onclick="FaceTubeApp.toggleTheme()">
+          <span class="theme-icon-sun">☀️</span>
+          <span class="theme-icon-moon">🌙</span>
+        </button>
+
+        <!-- Search Icon (Mobile) -->
+        <button class="icon-btn mobile-search-trigger" onclick="FaceTubeApp.toggleMobileSearch()">
+          <span>🔍</span>
+        </button>
+
+        <!-- Notifications -->
+        <button class="icon-btn" onclick="FaceTubeApp.navigateTo('notifications')" title="Notifications">
+          <span>🔔</span>
+          <span class="badge-count" id="notif-badge" style="display: none;">3</span>
+        </button>
+
+        <!-- Messages -->
+        <button class="icon-btn" onclick="FaceTubeApp.navigateTo('messages')" title="Messages">
+          <span>💬</span>
+          <span class="badge-count" id="msg-badge" style="display: none;">2</span>
+        </button>
+
+        <!-- Current User Avatar Profile Trigger -->
+        <div id="user-nav-profile" onclick="FaceTubeApp.openUserMenu()">
+          <img src="" id="nav-user-avatar" class="user-avatar-small" alt="Avatar">
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="main-layout">
+      <!-- Left Navigation Sidebar -->
+      <aside class="sidebar-left">
+        <div class="sidebar-heading">Explore</div>
+        <button class="nav-item active" data-nav="feed" onclick="FaceTubeApp.navigateTo('feed')">
+          <span class="icon">🏠</span> <span>Home Feed</span>
+        </button>
+        <button class="nav-item" data-nav="trending" onclick="FaceTubeApp.navigateTo('trending')">
+          <span class="icon">🔥</span> <span>Trending</span>
+        </button>
+        <button class="nav-item" data-nav="shorts" onclick="FaceTubeApp.navigateTo('shorts')">
+          <span class="icon">⚡</span> <span>Shorts & Reels</span>
+        </button>
+        <button class="nav-item" data-nav="videos" onclick="FaceTubeApp.navigateTo('videos')">
+          <span class="icon">🎬</span> <span>Video Hub</span>
+        </button>
+        <button class="nav-item" data-nav="messages" onclick="FaceTubeApp.navigateTo('messages')">
+          <span class="icon">💬</span> <span>Messages</span>
+        </button>
+        <button class="nav-item" data-nav="notifications" onclick="FaceTubeApp.navigateTo('notifications')">
+          <span class="icon">🔔</span> <span>Notifications</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-heading">Creator & Founder</div>
+        <button class="nav-item" onclick="FaceTubeApp.openProfile('mdfoysalalom')">
+          <span class="icon">👑</span> <span>Md Foysal Alom</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-heading">Creator Space</div>
+        <button class="nav-item" data-nav="creator-studio" onclick="FaceTubeApp.navigateTo('creator-studio')">
+          <span class="icon">📊</span> <span>Creator Studio</span>
+        </button>
+        <button class="nav-item" data-nav="monetization" onclick="FaceTubeApp.navigateTo('monetization')">
+          <span class="icon">💰</span> <span>Monetization</span>
+        </button>
+        <button class="nav-item" data-nav="admin" id="admin-nav-item" onclick="FaceTubeApp.navigateTo('admin')">
+          <span class="icon">🛡️</span> <span>Admin Panel</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-heading">Settings & Legal</div>
+        <button class="nav-item" data-nav="settings" onclick="FaceTubeApp.navigateTo('settings')">
+          <span class="icon">⚙️</span> <span>Settings & Privacy</span>
+        </button>
+        <button class="nav-item" onclick="FaceTubeApp.showLegalModal('terms')">
+          <span class="icon">📜</span> <span>Terms & Privacy</span>
+        </button>
+      </aside>
+
+      <!-- Center Dynamic Content Area -->
+      <main class="content-area" id="main-content">
+        <!-- Rendered dynamically by FaceTubeApp (feed, shorts, videos, profile, messages, creator, admin, settings) -->
+      </main>
+
+      <!-- Right Sidebar (Trends, Top Creator Spotlight) -->
+      <aside class="sidebar-right">
+        <!-- Creator Spotlight Card -->
+        <div class="post-card" style="border: 1px solid rgba(245, 158, 11, 0.4); background: linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, var(--bg-card) 100%);">
+          <div style="font-size: 11px; font-weight: 800; color: var(--gold); letter-spacing: 0.5px; margin-bottom: 8px;">★ OFFICIAL CREATOR & FOUNDER</div>
+          <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80" class="author-avatar creator-ring" alt="Md Foysal Alom">
+            <div>
+              <div style="font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 4px;">
+                Md Foysal Alom <span class="verified-badge">✓</span>
+              </div>
+              <div style="font-size: 12px; color: var(--text-muted);">@mdfoysalalom</div>
+              <div class="creator-badge" style="margin-top: 4px;">Founder & Creator</div>
+            </div>
+          </div>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 12px;">
+            Building the next generation of social media, video reels & fair creator monetization.
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; font-weight: 700; color: var(--text-primary);"><span id="spotlight-followers">128.5K</span> Followers</span>
+            <button class="btn-primary" id="spotlight-follow-btn" onclick="FaceTubeApp.toggleFollow('mdfoysalalom')">Follow</button>
+          </div>
+        </div>
+
+        <!-- Trending Topics Card -->
+        <div class="post-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-weight: 800; font-size: 14px;">🔥 Trending on FaceTube</span>
+            <span style="font-size: 12px; color: var(--primary); cursor: pointer;" onclick="FaceTubeApp.navigateTo('trending')">View All</span>
+          </div>
+          <div id="sidebar-trending-list" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Injected by app.js -->
+          </div>
+        </div>
+
+        <!-- Quick Monetization Status Widget -->
+        <div class="post-card" style="border-color: rgba(59, 130, 246, 0.3);">
+          <div style="font-size: 12px; font-weight: 800; color: var(--secondary); margin-bottom: 6px;">CREATOR REVENUE PROGRAM</div>
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 4px;">1,000 Followers + 10K Views</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Track your audience milestone & unlock 70% ad revenue share.</div>
+          <button class="btn-secondary" style="width: 100%; font-size: 12px;" onclick="FaceTubeApp.navigateTo('monetization')">Check Eligibility</button>
+        </div>
+
+        <!-- Platform Copyright & Legal Links -->
+        <div style="font-size: 11px; color: var(--text-muted); line-height: 1.6; padding: 0 4px;">
+          FaceTube © 2026 • Connect. Create. Share.<br>
+          <a href="#" onclick="FaceTubeApp.showLegalModal('terms')" style="text-decoration: underline;">Terms</a> • 
+          <a href="#" onclick="FaceTubeApp.showLegalModal('privacy')" style="text-decoration: underline;">Privacy</a> • 
+          <a href="#" onclick="FaceTubeApp.showLegalModal('guidelines')" style="text-decoration: underline;">Guidelines</a> • 
+          <a href="#" onclick="FaceTubeApp.showLegalModal('monetization')" style="text-decoration: underline;">Monetization</a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="bottom-nav-btn active" data-nav="feed" onclick="FaceTubeApp.navigateTo('feed')">
+        <span class="icon">🏠</span>
+        <span>Home</span>
+      </button>
+      <button class="bottom-nav-btn" data-nav="shorts" onclick="FaceTubeApp.navigateTo('shorts')">
+        <span class="icon">⚡</span>
+        <span>Shorts</span>
+      </button>
+      <button class="bottom-create-btn" onclick="FaceTubeApp.openCreateModal()" title="Create Post or Video">
+        <span>+</span>
+      </button>
+      <button class="bottom-nav-btn" data-nav="notifications" onclick="FaceTubeApp.navigateTo('notifications')">
+        <span class="icon">🔔</span>
+        <span>Alerts</span>
+      </button>
+      <button class="bottom-nav-btn" data-nav="profile" onclick="FaceTubeApp.openCurrentUserProfile()">
+        <span class="icon">👤</span>
+        <span>Profile</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODALS -->
+
+  <!-- Modal: Post Composer -->
+  <div class="modal-overlay" id="composer-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">Create FaceTube Post</div>
+        <button class="close-btn" onclick="FaceTubeApp.closeModal('composer-modal')">✕</button>
+      </div>
+      <div style="display: flex; gap: 10px; margin-bottom: 12px; align-items: center;">
+        <img src="" id="composer-user-avatar" class="author-avatar" alt="Avatar">
+        <div>
+          <div id="composer-user-name" style="font-weight: 700; font-size: 14px;">User</div>
+          <select id="composer-visibility" style="background: var(--bg-input); border: 1px solid var(--border-color); border-radius: var(--radius-xs); font-size: 11px; padding: 2px 6px;">
+            <option value="public">🌍 Public (Everyone)</option>
+            <option value="followers">👥 Followers Only</option>
+            <option value="private">🔒 Only Me</option>
+          </select>
+        </div>
+      </div>
+      <textarea id="composer-text" class="composer-textarea" style="width: 100%; min-height: 110px;" placeholder="What's happening? Share thoughts, #hashtags, @mentions..."></textarea>
+      
+      <!-- Poll Inputs (optional toggle) -->
+      <div id="poll-editor" style="display: none; background: var(--bg-input); padding: 10px; border-radius: var(--radius-md); margin-top: 10px;">
+        <div style="font-size: 12px; font-weight: 700; margin-bottom: 6px;">Create a Community Poll</div>
+        <input type="text" id="poll-option-1" class="form-input" placeholder="Option 1" style="margin-bottom: 6px;">
+        <input type="text" id="poll-option-2" class="form-input" placeholder="Option 2" style="margin-bottom: 6px;">
+      </div>
+
+      <!-- Attached Image/Video Preview -->
+      <div id="composer-media-preview" style="display: none; margin-top: 10px; border-radius: var(--radius-md); overflow: hidden; position: relative;">
+        <img id="composer-preview-img" src="" style="width: 100%; max-height: 240px; object-fit: cover; display: none;">
+        <video id="composer-preview-video" src="" controls style="width: 100%; max-height: 240px; display: none;"></video>
+        <button style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: #fff; width: 28px; height: 28px; border-radius: 50%; font-size: 12px;" onclick="FaceTubeApp.removeComposerMedia()">✕</button>
+      </div>
+
+      <div class="composer-tools-row">
+        <div class="composer-attachments">
+          <label class="tool-chip" style="cursor: pointer;">
+            📷 Photo <input type="file" id="composer-photo-input" accept="image/*" style="display: none;" onchange="FaceTubeApp.handleComposerMedia(this, 'photo')">
+          </label>
+          <label class="tool-chip" style="cursor: pointer;">
+            🎥 Video <input type="file" id="composer-video-input" accept="video/*" style="display: none;" onchange="FaceTubeApp.handleComposerMedia(this, 'video')">
+          </label>
+          <button class="tool-chip" onclick="FaceTubeApp.togglePollEditor()">📊 Poll</button>
+          <button class="tool-chip" onclick="FaceTubeApp.insertEmoji('🔥')">🔥</button>
+          <button class="tool-chip" onclick="FaceTubeApp.insertEmoji('❤️')">❤️</button>
+        </div>
+        <button class="btn-primary" onclick="FaceTubeApp.submitNewPost()">Publish Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Comments Drawer -->
+  <div class="modal-overlay" id="comments-modal">
+    <div class="modal-box" style="max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <div class="modal-title">Comments (<span id="comments-count-title">0</span>)</div>
+        <button class="close-btn" onclick="FaceTubeApp.closeModal('comments-modal')">✕</button>
+      </div>
+      <div id="comments-list-container" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px;">
+        <!-- Injected by feed.js -->
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px;">
+        <input type="text" id="comment-input-field" class="form-input" placeholder="Write a comment..." onkeydown="if(event.key==='Enter') FaceTubeApp.submitComment()">
+        <button class="btn-primary" onclick="FaceTubeApp.submitComment()">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Mandatory FaceTube Follow Onboarding Requirement -->
+  <div class="modal-overlay" id="onboarding-follow-modal">
+    <div class="modal-box" style="text-align: center; border: 2px solid var(--primary);">
+      <div style="font-size: 36px; margin-bottom: 8px;">👑</div>
+      <div class="modal-title" style="font-size: 20px; margin-bottom: 6px;">Welcome to FaceTube!</div>
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+        To activate your account and access the FaceTube community, please follow the official creator & founder profile.
+      </p>
+
+      <div style="background: var(--bg-input); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 18px; border: 1px solid var(--border-highlight);">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #F59E0B; margin: 0 auto 10px;" alt="Md Foysal Alom">
+        <div style="font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+          Md Foysal Alom <span class="verified-badge">✓</span>
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">@mdfoysalalom</div>
+        <div class="creator-badge" style="margin-bottom: 10px;">FaceTube Creator & Founder</div>
+        <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+          “Follow the FaceTube Creator account to continue.”
+        </p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn-primary" id="onboarding-follow-btn" style="padding: 12px; font-size: 15px;" onclick="FaceTubeApp.onboardingFollowCreator()">
+          Follow @mdfoysalalom
+        </button>
+        <button class="btn-secondary" id="onboarding-continue-btn" style="padding: 12px; font-size: 14px; opacity: 0.5; pointer-events: none;" onclick="FaceTubeApp.completeOnboarding()">
+          Continue to FaceTube →
+        </button>
+      </div>
+
+      <div style="font-size: 11px; color: var(--text-muted); margin-top: 14px;">
+        Disclosed Requirement: Managed via Platform Governance. Configurable by Admin.
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Authentication (Login / Register) -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="auth-modal-title">Join FaceTube</div>
+        <button class="close-btn" onclick="FaceTubeApp.closeModal('auth-modal')">✕</button>
+      </div>
+
+      <!-- Auth Tabs -->
+      <div style="display: flex; gap: 10px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+        <button class="action-btn" id="auth-tab-login" onclick="FaceTubeApp.switchAuthTab('login')" style="flex: 1; justify-content: center; font-weight: 700;">Login</button>
+        <button class="action-btn" id="auth-tab-register" onclick="FaceTubeApp.switchAuthTab('register')" style="flex: 1; justify-content: center; font-weight: 700;">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" onsubmit="event.preventDefault(); FaceTubeApp.handleLogin();">
+        <div class="form-group">
+          <label class="form-label">Email or Username</label>
+          <input type="text" id="login-identifier" class="form-input" placeholder="user@facetube.com or username" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="login-password" class="form-input" placeholder="Enter password" required>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 12px;">
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="login-remember" checked> Remember me
+          </label>
+          <a href="#" onclick="FaceTubeApp.forgotPassword()" style="color: var(--primary);">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 12px;">Log In</button>
+        <div style="margin-top: 14px; text-align: center;">
+          <button type="button" class="btn-secondary" style="width: 100%; font-size: 12px;" onclick="FaceTubeApp.quickLoginAsFounder()">⚡ Quick Demo: Log In as Founder (Md Foysal Alom)</button>
+        </div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" style="display: none;" onsubmit="event.preventDefault(); FaceTubeApp.handleRegister();">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="reg-name" class="form-input" placeholder="Your Name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" id="reg-username" class="form-input" placeholder="@username (letters, numbers)" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="reg-password" class="form-input" placeholder="Minimum 6 characters" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" id="reg-dob" class="form-input" required>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; margin-top: 8px;">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Video Player Theater -->
+  <div class="modal-overlay" id="video-theater-modal">
+    <div class="modal-box" style="max-width: 800px; padding: 16px;">
+      <div class="modal-header">
+        <div class="modal-title" id="theater-video-title">Video Title</div>
+        <button class="close-btn" onclick="FaceTubeApp.closeVideoTheater()">✕</button>
+      </div>
+      <div style="background: #000; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 12px;">
+        <video id="theater-video-player" controls autoplay style="width: 100%; max-height: 480px; display: block;"></video>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div id="theater-video-channel" style="display: flex; align-items: center; gap: 8px; font-weight: 700;"></div>
+        <div style="display: flex; gap: 8px;">
+          <button class="action-btn" id="theater-like-btn" onclick="FaceTubeApp.toggleCurrentVideoLike()">👍 Like</button>
+          <button class="action-btn" onclick="FaceTubeApp.shareCurrentVideo()">🔗 Share</button>
+        </div>
+      </div>
+      <div id="theater-video-desc" style="font-size: 13px; color: var(--text-secondary); background: var(--bg-input); padding: 12px; border-radius: var(--radius-sm); line-height: 1.5;"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Legal Pages (Terms, Privacy, Guidelines, Monetization) -->
+  <div class="modal-overlay" id="legal-modal">
+    <div class="modal-box" style="max-width: 650px;">
+      <div class="modal-header">
+        <div class="modal-title" id="legal-modal-title">FaceTube Policies</div>
+        <button class="close-btn" onclick="FaceTubeApp.closeModal('legal-modal')">✕</button>
+      </div>
+      <div id="legal-modal-content" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); max-height: 60vh; overflow-y: auto;">
+        <!-- Injected -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Script Modules -->
+  <script src="js/auth.js"></script>
+  <script src="js/feed.js"></script>
+  <script src="js/videos.js"></script>
+  <script src="js/shorts.js"></script>
+  <script src="js/messages.js"></script>
+  <script src="js/creator.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
